@@ -1,4 +1,4 @@
-# ECE-198
+# ECE_198
 
 This is a respository for our group project for ECE 198 at the University of Waterloo. Group members are Adon Ojha and Rashad Jayshanth-Nizar.
 
