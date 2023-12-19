@@ -29,23 +29,6 @@
 #include <stdio.h>
 #include <string.h>
 
-/* USER CODE END Includes */
-
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
-
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
 
@@ -67,12 +50,6 @@ static void MX_USART2_UART_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_RTC_Init(void);
 static void MX_USART6_UART_Init(void);
-/* USER CODE BEGIN PFP */
-
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
 
 // MAIN LOOP FUNCTIONS -----------------------------------------------------
 
@@ -192,33 +169,13 @@ void release_medication(void) {
 	clear_screen();
 }
 
-/* USER CODE END 0 */
 
-/**
-  * @brief  The application entry point.
-  * @retval int
-  */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
 
   /* Configure the system clock */
   SystemClock_Config();
-
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
@@ -226,14 +183,10 @@ int main(void)
   MX_I2C1_Init();
   MX_RTC_Init();
   MX_USART6_UART_Init();
-  /* USER CODE BEGIN 2 */
-
   lcd_init();
 
-  /* USER CODE END 2 */
-
   /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+  // Ask for password loop:
   char* password = create_password();
   if (!password) {
 	  // Handle malloc failure
@@ -251,70 +204,60 @@ int main(void)
 
   while (1)
   {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
-	  // Ask for password loop:
-
 	  // If user enters right password...
 	  if (!locked) {
-
+	
 	      // Prompt user to either dispense now or set timing to dispense automatically
 	      clear_screen();
 	      lcd_send_string("(1) - Dispense now");
 	      lcd_send_string("  (2) - Set timing");
 	      char input = Get_Key();
-
+	
 	      // Release now
 	      if (input == '1') {
-	    	  release_medication();
+		  release_medication();
 	      }
-
+	
 	      // Set time(s)
 	      if (input == '2') {
-	    	  clear_screen();
-	    	  lcd_send_string("How many doses per  day? ");
-	    	  char doses = Get_Key();
-	    	  HAL_Delay(500);
-
-	    	  // Make sure user inputs an integer
-	    	  while (doses == '*' || doses == '#' || doses == '0') {
-	    		  clear_screen();
-	    		  lcd_send_string("Invalid. Try again: ");
-	    		  doses = Get_Key();
-	    		  HAL_Delay(200);
-	    	  }
-	    	  int num_doses = doses - '0';
-
-	    	  // Get user to input the time interval between doses
-	    	  clear_screen();
-	    	  lcd_send_string("How many minutes between doses? ");
-	    	  int interval = get_integer_input();
-
-	    	  clear_screen();
-	    	  lcd_send_string("Time set.");
-	    	  HAL_Delay(3000);
-	    	  clear_screen();
-
-	    	  // For HAL_Delay
-	    	  int delay = interval * 60000;
-
-	    	  // Wait however long user specified, then release medication
-	    	  for (int i = 0; i < num_doses; i++) {
-	    		  lcd_put_cur(0,3);
-	    		  lcd_send_string("MediMinder Pro");
-	    		  HAL_Delay(delay);
-	    		  release_medication();
-	    	  }
+		  clear_screen();
+		  lcd_send_string("How many doses per  day? ");
+		  char doses = Get_Key();
+		  HAL_Delay(500);
+	
+		  // Make sure user inputs an integer
+		  while (doses == '*' || doses == '#' || doses == '0') {
+			  clear_screen();
+			  lcd_send_string("Invalid. Try again: ");
+			  doses = Get_Key();
+			  HAL_Delay(200);
+		  }
+		  int num_doses = doses - '0';
+	
+		  // Get user to input the time interval between doses
+		  clear_screen();
+		  lcd_send_string("How many minutes between doses? ");
+		  int interval = get_integer_input();
+	
+		  clear_screen();
+		  lcd_send_string("Time set.");
+		  HAL_Delay(3000);
+		  clear_screen();
+	
+		  // For HAL_Delay
+		  int delay = interval * 60000;
+	
+		  // Wait however long user specified, then release medication
+		  for (int i = 0; i < num_doses; i++) {
+			  lcd_put_cur(0,3);
+			  lcd_send_string("MediMinder Pro");
+			  HAL_Delay(delay);
+			  release_medication();
+		  }
 	      }
 	  }
-
 	  lcd_clear();
-
   }
-
-
-  /* USER CODE END 3 */
 }
 
 /**
