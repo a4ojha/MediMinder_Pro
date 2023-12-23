@@ -6,3 +6,5 @@ Our design in the domain of personal health and medicine is MediMinder Pro™, a
 energy and risk analysis, requirements, costs, testing, and implementation. Code files written for this design are included In the "Getting Started" and "Code" folders. Schematics and other information are in the "Documentation" folder.
 
 This design was built around the STM32401RE microcontroller from STMicroelectronics.
+
+For more information, visit www.adonojha.com/projects/mediminder
